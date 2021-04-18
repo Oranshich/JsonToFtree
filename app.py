@@ -70,6 +70,12 @@ def getFtreeFile():
         ftree_file += '*Links ' + str(key) + ' 0 0 ' + str(len(value)) + ' ' + str(len(num_of_nodes_in_layer[key])) + '\n'
         for edge in value:
             ftree_file += edge
+
+    ftree_file += '*Attributes\n'
+    for node in multilayer_dict['nodes']:
+        ftree_file += 'Node ' + str(node['NodeID']) + '\n'
+        for key, value in node.items():
+            ftree_file += str(key) + ' ' + str(value) + '\n'
     response = app.response_class(
         ftree_file,
         status=200,
