@@ -65,6 +65,16 @@ def getFtreeFile():
             edges_in_layers[current_layer].append(str(edge['source_node']) + ' ' + str(edge['target_node']) + ' ' + str(edge['weight']) + '\n')
             num_of_nodes_in_layer[current_layer].add(edge['source_node'])
             num_of_nodes_in_layer[current_layer].add(edge['target_node'])
+        else:
+            edges_in_layers[edge['source_layer']].append(str(edge['source_node']) + ' ' + str(edge['source_node']) + ' ' + str(edge['weight']) + '\n')
+
+            if edge['target_layer'] not in edges_in_layers:
+                edges_in_layers[edge['target_layer']] = []
+                num_of_nodes_in_layer[edge['target_layer']] = set()
+
+            edges_in_layers[edge['target_layer']].append(str(edge['target_node']) + ' ' + str(edge['target_node']) + ' ' + str(edge['weight']) + '\n')
+            num_of_nodes_in_layer[edge['source_layer']].add(edge['source_node'])
+            num_of_nodes_in_layer[edge['target_layer']].add(edge['target_node'])
 
     for key, value in edges_in_layers.items():
         ftree_file += '*Links ' + str(key) + ' 0 0 ' + str(len(value)) + ' ' + str(len(num_of_nodes_in_layer[key])) + '\n'
@@ -73,7 +83,7 @@ def getFtreeFile():
 
     ftree_file += '*Attributes\n'
     for node in multilayer_dict['nodes']:
-        ftree_file += 'Node ' + str(node['NodeID']) + '\n'
+        ftree_file += 'Node ' + str(node['id']) + '\n'
         for key, value in node.items():
             ftree_file += str(key) + ' ' + str(value) + '\n'
     response = app.response_class(
